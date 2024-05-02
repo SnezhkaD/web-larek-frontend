@@ -54,7 +54,7 @@ _______________________
 ## Типизация базового кода:
 
 1. `Product`: Класс, представляющий товар в магазине. Содержит информацию о названии, описании, цене и изображении товара:
-
+~~~js
    class Product {
    id: string,
    name: string,
@@ -62,47 +62,47 @@ _______________________
    price: number, image:
    string
    };
-
+~~~
 2. `Cart`: Класс, представляющий корзину пользователя. Содержит список товаров, добавленных пользователем, и методы для добавления и удаления товаров:
-
+~~~js
    class Cart {
    items: Product[],
    totalPrice: number
    };
-
+~~~
 3. `Order`: Класс, представляющий заказ пользователя. Содержит информацию о пользователе, список товаров в заказе и статус заказа:
-
+~~~js
    class Order {
    id: string,
    userId: string,
    products: Product[],
    status: string
    };
-
+~~~
 \*Описание компонентов, их функций и связей с другими компонентами:
 
 `ProductList`: Класс, отображающий список товаров. Связан с `Product` для отображения информации о каждом товаре:
-
+~~~js
 class ProductList {
 products: Product[];
 };
-
+~~~
 `CartView`: Класс, отображающий содержимое корзины. Связан с `Cart` для отображения информации о товарах в корзине:
-
+~~~js
 class CartView {
 cart: Cart;
 } ;
-
+~~~
 `OrderView`: Класс, отображающий информацию о заказе. Связан с `Order` для отображения статуса заказа и списка товаров:
-
+~~~js
 class OrderView {
 order: Order;
 };
-
+~~~
 \*Интерфейсы моделей данных бизнес-логики:
 
 1. `IProduct`: Интерфейс для класса `Product`:
-
+~~~js
    interface IProduct {
    id: string;
    name: string;
@@ -110,25 +110,25 @@ order: Order;
    price: number;
    image: string
    };
-
+~~~
 2. `ICart`: Интерфейс для класса `Cart`:
-
+~~~js
    interface ICart {
    items: IProduct[];
    totalPrice: number;
    addProduct: (product: IProduct) => void;
    removeProduct: (productId: string) => void;
    };
-
+~~~
 3. `IOrder`: Интерфейс для класса `Order`:
-
+~~~js
    interface IOrder {
    id: string;
    userId: string;
    products: IProduct[];
    status: string;
    };
-
+~~~
 ## Класс Api
 
 Класс `Api` представляет базовый API-клиент, который включает в себя методы для отправки GET и POST запросов.
