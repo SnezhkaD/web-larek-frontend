@@ -1,3 +1,5 @@
+https://github.com/SnezhkaD/web-larek-frontend
+
 # Проектная работа "Веб-ларек"
 
 ## Стек:
