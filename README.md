@@ -56,7 +56,7 @@ yarn build;
 ---
 #_Типы данных:_
 
-Интерфейс, описывающий карточку товара:
+- Интерфейс, описывающий карточку товара:
 
 ```ts
 interface IProduct {
@@ -68,7 +68,7 @@ interface IProduct {
 }
 ```
 
-Интерфейс для класса Basket:
+- Интерфейс для класса Basket:
 
 ```ts
 interface IBasket {
@@ -77,7 +77,7 @@ interface IBasket {
 }
 ```
 
-Интерфейс для класса Order:
+- Интерфейс для класса Order:
 
 ```ts
 interface IOrderForm {
@@ -86,7 +86,7 @@ interface IOrderForm {
 }
 ```
 
-Интерфейс IOrder, расширяющий IOrderForm:
+- Интерфейс IOrder, расширяющий IOrderForm:
 
 ```ts
 interface IOrder extends IOrderForm {
@@ -94,7 +94,7 @@ interface IOrder extends IOrderForm {
 }
 ```
 
-Интерфейс для класса Card:
+- Интерфейс для класса Card:
 
 ```ts
 interface ICard {
@@ -106,7 +106,7 @@ interface ICard {
 }
 ```
 
-Интерфейс для класса Page:
+- Интерфейс для класса Page:
 
 ```ts
 interface IPage {
@@ -116,7 +116,7 @@ interface IPage {
 }
 ```
 
-Интерфейс для класса AppState:
+- Интерфейс для класса AppState:
 
 ```ts
 interface IAppState {
@@ -127,7 +127,7 @@ interface IAppState {
 }
 ```
 
-Интерфейс для класса EventEmitter:
+- Интерфейс для класса EventEmitter:
 
 ```ts
 interface IEvents {
@@ -140,7 +140,7 @@ interface IEvents {
 }
 ```
 
-Интерфейс для класса Form:
+- Интерфейс для класса Form:
 
 ```ts
 interface IFormState {
@@ -149,15 +149,15 @@ interface IFormState {
 }
 ```
 
-Тип **FormErrors**, который используется для представления ошибок формы:
+- Тип **FormErrors**, который используется для представления ошибок формы:
 
 ```ts
 type FormErrors = Partial<Record<keyof IOrder, string>>;
 ```
 ---
-#_Базовые классы:_
+ #_Базовые классы:_ 
 
-**Api**
+- **Api**
 Класс, представляющий базовый API-клиент, который включает в себя методы для отправки GET и POST запросов:
 
 ```ts
@@ -176,7 +176,7 @@ class Api {
 }
 ```
 
-**EventEmitter**
+- **EventEmitter**
 Класс реализует интерфейс **IEvents** и предоставляет методы для управления подписками на события, инициирования событий и создания функций-триггеров:
 
 ```ts
@@ -204,7 +204,7 @@ class EventEmitter implements IEvents {
 }
 ```
 
-**Component**
+- **Component**
 Абстрактный базовый класс для компонентов отображения:
 
 ```ts
@@ -232,7 +232,7 @@ abstract class Component<T> {
 }
 ```
 
-**Model**
+- **Model**
 Абстрактный базовый класс для моделей данных:
 
 ```ts
@@ -247,7 +247,7 @@ abstract class Model<T> {
 ---
 #_Слой данных:_
 
-**AppState**
+- **AppState**
 Класс, описывающий состояние приложения, наследуется от Model:
 
 ```ts
@@ -279,7 +279,7 @@ class AppState extends Model<IAppState> {
 ---
 #_Слой представления:_
 
-**Basket**
+- **Basket**
 Класс, представляющий корзину пользователя. Содержит список товаров, добавленных пользователем, и методы для добавления и удаления товаров:
 
 ```ts
@@ -298,7 +298,7 @@ class Basket extends Component<IBasket> {
 }
 ```
 
-**Form**
+- **Form**
 Класс представляет собой компонент формы, который наследуется от базового класса Component и реализует дополнительные методы для управления состоянием и валидацией формы:
 
 ```ts
@@ -322,7 +322,7 @@ class Form<T> extends Component<IFormState> {
 ---
 #_Компоненты предметной области:_
 
-**Card**
+- **Card**
 Класс является подклассом Component и представляет карточку в пользовательском интерфейсе:
 
 ```ts
@@ -350,7 +350,7 @@ class Card extends Component<ICard> {
 }
 ```
 
-**Page**
+- **Page**
 Класс является подклассом Component и представляет собой страницу в веб-приложении:
 
 ```ts
@@ -370,7 +370,7 @@ class Page extends Component<IPage> {
 }
 ```
 
-**Order**
+- **Order**
 Класс, представляющий заказ пользователя. Содержит информацию о пользователе, список товаров в заказе и статус заказа:
 
 ```ts
