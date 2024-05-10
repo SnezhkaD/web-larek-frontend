@@ -65,6 +65,7 @@ interface IProduct {
 	description: string; //Описание товара
 	price: number; //Цена товара
 	image: string; //URL изображения товара
+	category: string; // Категория товара
 }
 ```
 
@@ -112,7 +113,7 @@ interface ICard {
 interface IPage {
 	counter: number; //Счетчик на странице
 	catalog: HTMLElement[]; //Каталог товаров или элементов
-	locked: boolean; //Логическое значение, указывающее, заблокирована ли страница для взаимодействия пользователя
+	basket: HTMLElement; // Отображение корзины
 }
 ```
 
@@ -123,7 +124,6 @@ interface IAppState {
 	basket: Product[]; // Массив товаров в корзине
 	order: IOrder; // Текущий заказ
 	catalog: Product[]; // Каталог товаров
-	formErrors: FormErrors; // Ошибки формы
 }
 ```
 
@@ -146,6 +146,23 @@ interface IEvents {
 interface IFormState {
 	valid: boolean; // Флаг валидности формы
 	errors: string[]; // Массив строк с ошибками
+}
+```
+
+- Интерфейс для создание заказа:
+  
+ ```ts
+interface IOrderAnswer {
+	total: number; // идентификатор заказа
+}
+```
+
+- Интерфейс для работы с API магазина:
+  
+```ts
+export interface IStoreApi {
+	getProductList: () => Promise<IProduct[]>; // Получение списка всех продуктов, доступных в магазине
+	orderProduct: (value: IOrder) => Promise<IOrderAnswer>; // Отправка заказа на сервер
 }
 ```
 
@@ -258,7 +275,7 @@ class AppState extends Model<IAppState> {
 	formErrors: FormErrors;
 
 	// Метод для добавления товара в корзину
-	addToBasket(value: Product);
+	addToBasket();
 
 	// Метод для полной очистки корзины
 	clearBasket();
@@ -270,10 +287,28 @@ class AppState extends Model<IAppState> {
 	setCatalog();
 
 	// Метод для валидации заказа
-	validateOrder();
+	validateOrderform();
 
 	// Метод для установки поля заказа
-	setOrderField(field: keyof IOrderForm, value: string);
+	setOrderField();
+
+    // Метод для добавления идентификатора товара в заказ
+    addOrderID();
+
+    // Метод для удаления идентификатора товара из заказа
+	removeOrderID();
+
+    // Метод для удаления товара из корзины
+	removeBasket();
+
+    // Метод для установки поля контакта
+	setContactsField();
+
+    // Метод для проверки, содержится ли товар в корзине
+	containsProduct(); 
+
+    // Метод для валидации формы контакта
+    validateContactsForm();
 }
 ```
 ---
@@ -287,14 +322,14 @@ class Basket extends Component<IBasket> {
 	// Конструктор класса, который принимает контейнер и EventEmitter
 	constructor(container: HTMLElement, protected events: EventEmitter);
 
-	// Сеттер для установки цены корзины
-	set price(price: number);
+	// Сеттер для установки выбранных элементов в корзине
+	set selected();
 
 	// Сеттер для установки списка элементов в корзине
-	set list(items: HTMLElement[]);
+	set items();
 
-	// Метод для отключения кнопки
-	disableButton();
+	// Сеттер для установки общей суммы заказа
+	set total();
 }
 ```
 
@@ -307,16 +342,16 @@ class Form<T> extends Component<IFormState> {
 	constructor(protected container: HTMLFormElement, protected events: IEvents);
 
 	// Метод, который вызывается при изменении поля ввода
-	protected onInputChange(field: keyof T, value: string);
+	protected onInputChange();
 
 	// Сеттер для установки флага валидности формы
-	set valid(value: boolean);
+	set valid();
 
 	// Сеттер для установки ошибки формы
-	set errors(value: string);
+	set errors();
 
 	//Метод для рендеринга формы с новым состоянием
-	render(state: Partial<T> & IFormState);
+	render();
 }
 ```
 ---
@@ -331,22 +366,35 @@ class Card extends Component<ICard> {
 	constructor(container: HTMLElement);
 
 	// Сеттер и геттер для идентификатора карточки
-	set id(value: string);
-	get id(): string;
+	set id();
+	get id();
 
-	// Сеттер и гетер для заголовка карточки
-	set title(value: string);
-	get title();
-
+	// Сеттер для заголовка карточки
+	set title();
+	
 	// Сеттер для изображения, отображаемое на карточке
 	set image();
 
-	//Сеттер и гетер для текста, отображаемого на карточке
-	set description(value: string | string[]);
-	get description(): string;
+    // Сеттер используется для установки цены товара
+	set price();
 
 	//Сеттер для категории, к которой относится карточка
-	set category(value: Category): void;
+	set category(): void;
+}
+```
+- **CardView**
+ Класс является подклассом Card и представляет собой компонент, который отвечает за отображение и взаимодействие с карточкой товара в пользовательском интерфейсе:
+
+```ts
+class CardView extends Card {
+    // Конструктор класса принимает контейнер, в котором будет отрисовываться карточка, и объект для обработки событий
+	constructor(container: HTMLElement, actions?: ICardActions);
+
+    // Сеттер для установки индекса карточки
+	set index();
+
+    //Сеттер и гетер для текста, отображаемого на карточке
+	set description(); 
 }
 ```
 
@@ -355,18 +403,17 @@ class Card extends Component<ICard> {
 
 ```ts
 class Page extends Component<IPage> {
-	/*Конструктор класса принимает два параметра:
-это элемент HTML, в котором будет отображаться страница, и объект, содержащий обработчики //событий для страницы*/
+	//Конструктор класса принимает элемент HTML, в котором будет отображаться страница, и объект, содержащий обработчики событий для страницы
 	constructor(container: HTMLElement, protected events: IEvents);
 
 	//Сеттер для установки значения счетчика
-	set counter(value: number);
+	set counter();
 
 	//Сеттер для установки элементов магазина
-	set store(items: HTMLElement[]);
+	set store();
 
 	//Сеттер для блокировки или разблокировки страницы
-	set locked(value: boolean);
+	set locked();
 }
 ```
 
@@ -375,14 +422,80 @@ class Page extends Component<IPage> {
 
 ```ts
 class Order extends Form<IOrderForm> {
-	// Конструктор класса, который принимает контейнер формы и и обработчик событий
+	// Конструктор класса, который принимает контейнер формы и обработчик событий
 	constructor(container: HTMLFormElement, events: IEvents);
 
-	// Сеттер для установки номера телефона
-	set phone(value: string);
+	// Сеттер для выбора оплаты
+	set payment();
 
-	//Сеттер для установки адреса электронной почты
-	set email(value: string);
+	//Сеттер для установки адреса 
+	set address();
 }
 ```
 
+- **ContactsForm**
+Класс является подклассом Form и представляет собой компонент, который отвечает за взаимодействие с формой контактов в пользовательском интерфейсе:
+
+```ts
+class ContactsForm extends Form<IOrderForm> {
+	// Конструктор класса принимает контейнер формы и обработчик событий
+	constructor(container: HTMLFormElement, events: IEvents)
+
+    // Сеттер для установки значения поля ввода телефона
+	set phone()
+
+    // Сеттер для установки значения поля ввода электронной почты
+	set email()
+}
+```
+
+- **StoreAPI**
+ Класс является подклассом Api и реализует интерфейс IStoreApi. Он отвечает за взаимодействие с сервером, предоставляя методы для получения списка товаров и отправки заказа:
+
+```ts
+class StoreAPI extends Api implements IStoreApi {
+	// Конструктор класса, который принимает базовый URL, и объект для настройки запросов:
+	constructor(cdn: string, baseUrl: string, options?: RequestInit);
+
+    // Метод для получения списка товаров
+	getProductList();
+
+    // Метод для отправки заказа
+	orderProduct();
+}
+```
+
+- **Modal**
+Класс является подклассом Component и представляет собой компонент, который отвечает за отображение и взаимодействие с модальным окном в пользовательском интерфейсе:
+
+```ts
+class Modal extends Component<IModalData> {
+	// Конструктор класса, который принимает контейнер, в котором будет отрисовываться модальное окно, и обработчик событий
+	constructor(container: HTMLElement, protected events: IEvents);
+    
+	// Метод, открывающий модальное окно
+	open();
+    
+	//  Метод, закрывающий модальное окно
+	close();
+
+    // Метод, который рендерит данные в модальное окно и открывает его
+	render();
+
+    // Сеттер для установки содержимого модального окна
+	set content();
+}
+```
+
+- **Success**
+Класс является подклассом Component и представляет собой компонент, который отвечает за отображение и взаимодействие с модальным окном успешного заказа в пользовательском интерфейсе:
+
+```ts
+class Success extends Component<ISuccess> {
+    // Конструктор класса принимает контейнер, в котором будет отрисовываться модальное окно успешного заказа, и обработчик событий
+	constructor(container: HTMLElement, actions?: ISuccessActions);
+
+    //Сеттер для установки общей суммы заказа
+	set total();
+}
+```
