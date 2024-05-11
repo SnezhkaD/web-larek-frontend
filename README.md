@@ -78,7 +78,7 @@ interface IBasket {
 }
 ```
 
-- Интерфейс для класса Order:
+- Интерфейс для класса ContactsForm:
 
 ```ts
 interface IOrderForm {
@@ -87,7 +87,16 @@ interface IOrderForm {
 }
 ```
 
-- Интерфейс IOrder, расширяющий IOrderForm:
+- Интерфейс для класса Order:
+  
+```ts 
+interface IOrderContact {
+	payment: string; // Способ оплаты
+	address: string; // Адрес доставки
+}
+```
+
+- Интерфейс IOrder, расширяющий IOrderForm и IOrderContact:
 
 ```ts
 interface IOrder extends IOrderForm {
