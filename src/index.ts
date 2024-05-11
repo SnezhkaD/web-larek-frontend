@@ -2,7 +2,7 @@ import './scss/styles.scss';
 
 import { StoreAPI } from './components/StoreAPI';
 import { API_URL, CDN_URL } from './utils/constants';
-import { EventEmitter } from './components/base/events';
+import { EventEmitter } from './components/base/Events';
 import { AppState } from './components/AppState';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { Card, CardView } from './components/Card';
@@ -11,8 +11,8 @@ import { Modal } from './components/common/Modal';
 import { Order } from './components/Order';
 import { IOrder, IProduct, IOrderForm } from './types';
 import { ContactsForm } from './components/Contacts';
-import { Basket } from './components/common/Basket';
-import { Success } from './components/common/Success';
+import { Basket } from './components//Basket';
+import { Success } from './components//Success';
 
 const events = new EventEmitter();
 const api = new StoreAPI(CDN_URL, API_URL);

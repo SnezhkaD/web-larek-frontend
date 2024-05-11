@@ -1,4 +1,4 @@
-import { Api, ApiListResponse } from './base/api';
+import { Api, ApiListResponse } from './base/Api';
 import { IProduct, IOrderAnswer, IOrder } from '../types/index';
 import { IStoreApi } from '../types/index';
 

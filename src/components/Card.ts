@@ -68,7 +68,8 @@ export class CardView extends Card {
 	constructor(container: HTMLElement, actions?: ICardActions) {
 		super(container);
 		this.buttonElement = container.querySelector('.card__button');
-
+		this._index = container.querySelector('.basket__item-index');
+        this._description = container.querySelector('.card__text');
 		if (actions?.onClick) {
 			if (this.buttonElement) {
 				this.buttonElement.addEventListener('click', actions.onClick);
@@ -77,12 +78,10 @@ export class CardView extends Card {
 	}
 
 	set index(value: number) {
-		this._index = this.container.querySelector('.basket__item-index');
 		this.setText(this._index, value);
 	}
 
 	set description(value: string) {
-		this._description = this.container.querySelector('.card__text');
 		this.setText(this._description, value);
 	}
 }

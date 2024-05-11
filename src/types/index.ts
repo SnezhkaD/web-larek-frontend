@@ -13,16 +13,20 @@ export interface IProduct {
 	price: number | null; //Цена товара
 }
 
-// Интерфейс для класса Order
+// Интерфейс для класса ContactsForm
 export interface IOrderForm {
 	email: string; // Электронный адрес пользователя
 	phone: string; // Номер телефона пользователя
+}
+
+// Интерфейс для класса Order
+export interface IOrderContact {
 	payment: string; // Способ оплаты
 	address: string; // Адрес доставки
 }
 
-// Интерфейс IOrder, расширяющий IOrderForm
-export interface IOrder extends IOrderForm {
+// Интерфейс IOrder, расширяющий IOrderForm и IOrderContact
+export interface IOrder extends IOrderForm, IOrderContact {
 	total: number; // Общая сумма заказа
 	items: string[]; // Массив строк, представляющий идентификаторы или описания товаров, включенных в заказ
 }

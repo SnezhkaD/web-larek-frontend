@@ -1,5 +1,5 @@
 import { Component } from '../base/Component';
-import { IEvents } from '../base/events';
+import { IEvents } from '../base/Events';
 import { ensureElement } from '../../utils/utils';
 
 interface IFormState {
@@ -26,7 +26,7 @@ export class Form<T> extends Component<IFormState> {
 			const value = target.value;
 			this.onInputChange(field, value);
 		});
-
+		
 		this.container.addEventListener('submit', (e: Event) => {
 			e.preventDefault();
 			this.events.emit(`${this.container.name}:submit`);
@@ -41,7 +41,7 @@ export class Form<T> extends Component<IFormState> {
 	}
 
 	set valid(value: boolean) {
-		this._submit.disabled = !value;
+		this.setDisabled(this._submit, !value);
 	}
 
 	set errors(value: string) {
